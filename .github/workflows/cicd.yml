@@ -50,3 +50,14 @@ jobs:
 
       - name: docker img push 
         run: docker push mukeshr29/zomato-clone
+
+  deploy:
+    name: deploy app in docker container
+    needs: build
+    runs-on: [zomato]
+    steps:
+      - name: scan img before deploy
+        run: trivy image --format table -o trivy-img-report.html mukeshr29/zomato-clone
+
+      - name: run container 
+        run: docker run -d --name zomato -p 3000:3000 mukeshr29/zomato-clone
