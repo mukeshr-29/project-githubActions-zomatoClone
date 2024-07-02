@@ -64,8 +64,7 @@ jobs:
         with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
       - run: |
-          kubectl create ns zomatoapp
-          kubctl apply -f deployment.yml -f service.yml -n zomatoapp
+          kubectl apply -f deployment.yml -f service.yml -n zomatoapp
           kubectl get svc -n zomatoapp
       
 
