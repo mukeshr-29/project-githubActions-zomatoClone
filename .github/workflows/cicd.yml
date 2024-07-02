@@ -60,8 +60,8 @@ jobs:
         run: trivy image --format table -o trivy-img-report.html mukeshr29/zomato-clone
 
       - name: deployment via eks
-        uses: actions-hub/kubectl@master
-        env:
+        uses: tale/kubectl-action@v1
+        with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
       - run: |
           kubectl create ns zomatoapp
