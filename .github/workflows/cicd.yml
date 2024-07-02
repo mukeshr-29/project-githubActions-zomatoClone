@@ -52,12 +52,20 @@ jobs:
         run: docker push mukeshr29/zomato-clone
 
   deploy:
-    name: deploy app in docker container
+    name: deploy app in eks
     needs: build
     runs-on: [zomato]
     steps:
       - name: scan img before deploy
         run: trivy image --format table -o trivy-img-report.html mukeshr29/zomato-clone
 
-      - name: run container 
-        run: docker run -d --name zomato -p 3000:3000 mukeshr29/zomato-clone
+      - name: deployment via eks
+        uses: actions-hub/kubectl@master
+        env:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+      - run: |
+          kubectl create ns zomatoapp
+          kubctl apply -f deployment.yml -f service.yml -n zomatoapp
+          kubectl get svc -n zomatoapp
+      
+
