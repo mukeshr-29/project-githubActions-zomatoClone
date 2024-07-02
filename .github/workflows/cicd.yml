@@ -1,0 +1,31 @@
+name: build, scan, package
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build
+    runs-on: [zomato]
+    steps:
+      - name: checkout the code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: install dependencies
+        run: npm install
+
+      - name: file system scanning
+        run: trivy fs --format table -o trivy-fs-report.html .
+
+      - name: analyzing code using sonarqube
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      # - name: docker build and tag
+      #   run: |
+      #     docker build -t mukeshr29/zomato-clone .
