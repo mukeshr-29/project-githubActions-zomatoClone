@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: install dependencies
-        run: npm install
+        run: sudo apt install nodejs -y
 
       - name: file system scanning
         run: trivy fs --format table -o trivy-fs-report.html .
